@@ -118,7 +118,6 @@ export const getClientData = async ({id, sessionId}) => {
 
 export const getPortfolioSummary = async ({id, sessionId, freshDate}) => {
     let type= 'AMC'
-    let date = '2024-05-22'
     const data = `${id}|${sessionId}|${type}|${freshDate}|${process.env.ProjectID}`;
 
     const encryptedData = Encrypt(data, process.env.key)
@@ -128,6 +127,8 @@ export const getPortfolioSummary = async ({id, sessionId, freshDate}) => {
     const bodyParameters = {
         ParamValue : encryptedData
     }
+
+    console.log(encryptedData)
     
     let result = null
     await api.post(

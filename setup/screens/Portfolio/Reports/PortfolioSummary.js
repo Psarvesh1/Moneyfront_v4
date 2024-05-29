@@ -14,6 +14,7 @@ import DatePicker from 'react-native-date-picker'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const PortfolioSummary = () => {
+
   const [open, setOpen] = useState(false)
   const [date, setDate] = useState(new Date())
   const [flag, setFlag] = useState(false)
@@ -33,7 +34,7 @@ const PortfolioSummary = () => {
   const fetchData = async () => {
     let newDate = `${year}-${formatedMonth}-${formatedDay}`;
     setFreshDate(newDate)
-    console.log(newDate)
+    console.error(freshDate)
     setFlag(false)
     try {
       const data = await getPortfolioSummary({id, sessionId, freshDate})
@@ -41,7 +42,7 @@ const PortfolioSummary = () => {
       let summaryData = data.Summary
       if(transact.length!== null && summaryData.length !== null){
           setPortfolioSummary(summaryData)
-          setPortfolioTransactions(transact)  
+          setPortfolioTransactions(transact)
         }else{
           setPortfolioSummary(null)
           setTransactions(null)
@@ -51,12 +52,28 @@ const PortfolioSummary = () => {
       console.log(err)
     }
   }
+
+  function formatDate(dateString, currentDateFormat, FormattedDateFormat) {
+    return moment(dateString, currentDateFormat).format(FormattedDateFormat);
+  }
+  
   const changeDate = async (date) => {
     setOpen(false)
-    console.log(date)
+    let d = date.getDate()
+    let m = date.getMonth() + 1;
+    let y = date.getFullYear();
+    let formatedMonth = m < 10 ? `0${m}` : m;
+    let formatedDay = d < 10 ? `0${d}` : d;
+    const freshDate = `${y}-${formatedMonth}-${formatedDay}`;
+    setFreshDate(freshDate)
+    console.log()
+    // console.log(date)
     setDate(date)
+        console.log(date)
+
     await fetchData()
   }
+
   useEffect(() => {
     // giveDate(new Date())
     if(portfolioSummary === null){
@@ -110,10 +127,15 @@ const PortfolioSummary = () => {
             mode='date'
             open={open}
             date={date}
-            onConfirm={changeDate}
+            onConfirm={(date)=> changeDate(date)}
             onCancel={() => {
               setOpen(false)
             }}
+            format="DD MMM YYYY"
+
+            locale='en-GB'
+            onDateChange={(newDate) => console.error(newDate)}
+
           />
           {OnLoad()}
           </Container>

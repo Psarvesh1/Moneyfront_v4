@@ -177,9 +177,9 @@ const SnapData = () => {
     </Container>
     )
   }
-  if (clientActualPortfolio === '') {
+  if (clientActualPortfolio === null) {
     return <SnapNoData />
-  } else if (flag === true) {
+  } else if (clientActualPortfolio) {
     return <Snapshot />
   } else {
     return <ActivityIndicatorElement />
